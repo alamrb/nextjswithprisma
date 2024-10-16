@@ -5,25 +5,34 @@ import prisma from "../lib/db";
 // console.log(prisma)
 
 const PostPage = async () => {
-  const posts = await prisma.post.findMany({
-    where: {
-      // published:true,
-      // title: {
-      //   contains: "test",
-      //   endsWith:"post"
-      // }
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    // take: 1,
-    // skip: 1,
+  // const posts = await prisma.post.findMany({
+  //   where: {
+  //     // published:true,
+  //     // title: {
+  //     //   contains: "test",
+  //     //   endsWith:"post"
+  //     // }
+  //   },
+  //   orderBy: {
+  //     createdAt: "desc",
+  //   },
+  //   // take: 1,
+  //   // skip: 1,
 
-    // select: {
-    //   id: true,
-    //   title: true,
-    //   // slug:true,
-    // }
+  //   // select: {
+  //   //   id: true,
+  //   //   title: true,
+  //   //   // slug:true,
+  //   // }
+  // });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: "alamrb@gmail.com",
+    },
+    include: {
+      posts: true,
+    },
   });
 
   // const postsCount = await prisma.post.count();
@@ -31,9 +40,9 @@ const PostPage = async () => {
   return (
     <main className="flex flex-col items-center gap-y-5 pt-24 text-center">
       <h1>Home page change of content</h1>
-      <h1 className="text-3xl font-semibold">All({posts.length})</h1>
+      <h1 className="text-3xl font-semibold">All({user.posts.length})</h1>
       <ul className="border-t border-b border-black/10 py-5 leading-8">
-        {posts.map((post) => (
+        {user.posts.map((post) => (
           <li key={post.id} className="flex items-center justify-between px-5">
             <Link href={`/posts/${post.id}`}> {post.title}</Link>
           </li>
